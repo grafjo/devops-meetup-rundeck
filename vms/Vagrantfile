@@ -1,0 +1,94 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+Vagrant.configure("2") do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://atlas.hashicorp.com/search.
+  config.vm.box = "debian/jessie64"
+
+  config.ssh.insert_key = false
+
+  # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
+  # such as FTP and Heroku are also available. See the documentation at
+  # https://docs.vagrantup.com/v2/push/atlas.html for more information.
+  # config.push.define "atlas" do |push|
+  #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
+  # end
+
+  # Enable provisioning with a shell script. Additional provisioners such as
+  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
+  # documentation for more information about their specific syntax and use.
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+  config.vm.define "rundeck" do |node|
+    node.vm.hostname = "rundeck.meetup"
+    node.vm.network :private_network, ip: "192.168.33.50"
+    node.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+      vb.linked_clone = true
+    end
+    node.vm.provision "shell", path: "scripts/setup_rundeck.sh"
+  end
+
+  config.vm.define "jenkins" do |node|
+    node.vm.hostname = "jenkins.meetup"
+    node.vm.network :private_network, ip: "192.168.33.51"
+    node.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+      vb.linked_clone = true
+    end
+    node.vm.provision "shell", path: "scripts/setup_jenkins.sh"
+  end
+
+  config.vm.define "nexus" do |node|
+    node.vm.hostname = "nexus.meetup"
+    node.vm.network :private_network, ip: "192.168.33.52"
+    node.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+      vb.linked_clone = true
+    end
+    node.vm.provision "shell", path: "scripts/setup_nexus.sh"
+  end
+
+  config.vm.define "test" do |node|
+    node.vm.hostname = "devops-test.meetup"
+    node.vm.network :private_network, ip: "192.168.33.61"
+    node.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+      vb.linked_clone = true
+    end
+    node.vm.provision "shell", path: "scripts/setup_demo.sh"
+  end
+
+  config.vm.define "stage" do |node|
+    node.vm.hostname = "devops-stage.meetup"
+    node.vm.network :private_network, ip: "192.168.33.62"
+    node.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+      vb.linked_clone = true
+    end
+    node.vm.provision "shell", path: "scripts/setup_demo.sh"
+  end
+
+  config.vm.define "prod" do |node|
+    node.vm.hostname = "devops-prod.meetup"
+    node.vm.network :private_network, ip: "192.168.33.63"
+    node.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+      vb.linked_clone = true
+    end
+    node.vm.provision "shell", path: "scripts/setup_demo.sh"
+  end
+
+
+end

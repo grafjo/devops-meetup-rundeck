@@ -1,0 +1,36 @@
+<joblist>
+  <job>
+    <context>
+      <options preserveOrder='true'>
+        <option enforcedvalues='true' name='command' required='true' value='status' values='restart,start,status,stop' />
+      </options>
+    </context>
+    <description>manage demo service</description>
+    <dispatch>
+      <excludePrecedence>true</excludePrecedence>
+      <keepgoing>true</keepgoing>
+      <rankOrder>ascending</rankOrder>
+      <threadcount>1</threadcount>
+    </dispatch>
+    <executionEnabled>true</executionEnabled>
+    <id>11793f8a-e4e9-498a-b2ca-5da1d22ea006</id>
+    <loglevel>INFO</loglevel>
+    <name>service-demo</name>
+    <nodefilters>
+      <filter>tags: meetup</filter>
+    </nodefilters>
+    <nodesSelectedByDefault>false</nodesSelectedByDefault>
+    <retry>1</retry>
+    <scheduleEnabled>true</scheduleEnabled>
+    <sequence keepgoing='false' strategy='node-first'>
+      <command>
+        <exec>sudo systemctl ${option.command} demo</exec>
+      </command>
+      <command>
+        <exec>echo ${option.command} demo ok </exec>
+      </command>
+    </sequence>
+    <timeout>30s</timeout>
+    <uuid>11793f8a-e4e9-498a-b2ca-5da1d22ea006</uuid>
+  </job>
+</joblist>

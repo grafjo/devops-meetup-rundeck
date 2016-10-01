@@ -1,0 +1,124 @@
+<joblist>
+  <job>
+    <context>
+      <options preserveOrder='true'>
+        <option enforcedvalues='true' name='repository' required='true' value='snapshots' values='releases,snapshots'>
+          <description>the nexus repository</description>
+        </option>
+        <option name='version' required='true' value='LATEST'>
+          <description>version of demo artifact</description>
+        </option>
+      </options>
+    </context>
+    <description>deploys demo application to a given system</description>
+    <dispatch>
+      <excludePrecedence>true</excludePrecedence>
+      <keepgoing>false</keepgoing>
+      <rankOrder>ascending</rankOrder>
+      <threadcount>1</threadcount>
+    </dispatch>
+    <executionEnabled>true</executionEnabled>
+    <id>9be634c4-876e-450b-9aae-2afe1f421d85</id>
+    <loglevel>INFO</loglevel>
+    <name>deploy-demo</name>
+    <nodefilters>
+      <filter>tags: meetup</filter>
+    </nodefilters>
+    <nodesSelectedByDefault>false</nodesSelectedByDefault>
+    <retry>1</retry>
+    <scheduleEnabled>true</scheduleEnabled>
+    <sequence keepgoing='false' strategy='node-first'>
+      <command>
+        <description>copy artifact to system</description>
+        <step-plugin type='nexus-deliver-artifact-step'>
+          <configuration>
+            <entry key='artifact' value='demo' />
+            <entry key='destinationPath' value='/home/vagrant/' />
+            <entry key='echo' value='true' />
+            <entry key='group' value='devops.meetup' />
+            <entry key='packaging' value='jar' />
+            <entry key='repo' value='${option.repository}' />
+            <entry key='version' value='${option.version}' />
+          </configuration>
+        </step-plugin>
+      </command>
+      <command>
+        <description>stop demo service</description>
+        <jobref name='service-demo' nodeStep='true'>
+          <arg line='-command stop' />
+          <nodefilters>
+            <filter>name: ${node.name}</filter>
+          </nodefilters>
+        </jobref>
+      </command>
+      <command>
+        <description>rotate symlink</description>
+        <script><![CDATA[#!/bin/bash
+
+BASE_PATH=/home/vagrant
+JAR_SYMLINK="$BASE_PATH/demo.jar"
+FILES=($(ls $BASE_PATH/demo-*.jar))
+tLen=${#FILES[@]}
+NEW_JAR=$(basename ${FILES[$tLen-1]})
+
+if [ -L $JAR_SYMLINK ] ; then
+  echo "current symlink target $(readlink $JAR_SYMLINK)"
+else
+  echo "there is no symlink to $JAR_SYMLINK"
+fi
+
+
+echo "creating new symlink"
+ln -sf "$BASE_PATH/$NEW_JAR" $JAR_SYMLINK
+
+echo "new symlink target is $(readlink $JAR_SYMLINK)"]]></script>
+        <scriptargs />
+      </command>
+      <command>
+        <description>start demo service</description>
+        <jobref name='service-demo' nodeStep='true'>
+          <arg line='-command start' />
+          <nodefilters>
+            <filter>name: ${node.name}</filter>
+          </nodefilters>
+        </jobref>
+      </command>
+      <command>
+        <description>check application status</description>
+        <script><![CDATA[#!/bin/bash
+
+CURRENT_STATUS="UNKNOWN"
+
+if [[ ! -e /usr/bin/jq ]]
+then
+    echo "please install jq!"
+    exit 1
+fi
+
+for i in {0..30}
+do
+  if [[ "$i" -eq "30" ]]
+  then
+    exit 1
+  fi
+
+  if [[ $CURRENT_STATUS == "UP" ]]
+  then
+    echo "Application up and running"
+    exit 0
+  else
+    CURRENT_STATUS=$(curl -s localhost:8080/health | jq -r '.status')
+    if [[ -z "$CURRENT_STATUS" ]]
+    then
+      echo "Waiting for application to start"
+      sleep 1
+    fi
+  fi
+done]]></script>
+        <scriptargs />
+      </command>
+    </sequence>
+    <timeout>2m</timeout>
+    <uuid>9be634c4-876e-450b-9aae-2afe1f421d85</uuid>
+  </job>
+</joblist>
