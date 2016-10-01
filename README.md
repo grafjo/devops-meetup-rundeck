@@ -92,7 +92,7 @@ Node Liste für Meetup-Projekt unter `/var/lib/rundeck/projects/meetup/etc/resou
 <project>
   <node name="localhost" description="Rundeck server node" tags="" hostname="localhost" osArch="amd64" osFamily="unix" osName="Linux" osVersion="3.16.0-4-amd64" username="rundeck"/>
   <node name="test" description="meetup demo test node" tags="meetup,test" hostname="192.168.33.61" osArch="amd64" osFamily="Debian" osName="Debian" osVersion="jessie" username="vagrant"/>
-  <node name="test" description="meetup demo test node" tags="meetup,test" hostname="192.168.33.62" osArch="amd64" osFamily="Debian" osName="Debian" osVersion="jessie" username="vagrant"/>
+  <node name="stage" description="meetup demo stage node" tags="meetup,stage" hostname="192.168.33.62" osArch="amd64" osFamily="Debian" osName="Debian" osVersion="jessie" username="vagrant"/>
   <node name="prod" description="meetup demo prod node" tags="meetup,prod" hostname="192.168.33.63" osArch="amd64" osFamily="Debian" osName="Debian" osVersion="jessie" username="vagrant"/>
 </project>
 ```
