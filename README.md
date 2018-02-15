@@ -138,7 +138,7 @@ rd-acl create -c application -g deploy -p meetup -a read >> /etc/rundeck/deploy.
 ### acl für meetup ssh-key
 
 ```bash
-rd-acl create -c application -g deploy -s meetup -a read >> /etc/rundeck/deploy.aclpolicy
+rd-acl create -c application -g deploy -s keys/meetup -a read >> /etc/rundeck/deploy.aclpolicy
 ```
 
 ### rd-acl list vorstellen

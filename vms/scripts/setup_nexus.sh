@@ -1,13 +1,13 @@
 #!/bin/bash
 
-NEXUS_VERSION=2.13.0-01
+NEXUS_VERSION=2.14.7-01
 user="nexus"
 group="nexus"
 
 
 echo "deb http://ftp.debian.org/debian/ jessie-backports main contrib non-free" > /etc/apt/sources.list.d/backports.list
 apt-get update
-apt-get install -y openjdk-8-jre-headless vim-nox unzip curl
+apt-get install -t jessie-backports -y openjdk-8-jre-headless ca-certificates-java vim-nox unzip curl
 
 addgroup --system "$group" --quiet
 
