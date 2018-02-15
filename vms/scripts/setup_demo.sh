@@ -2,7 +2,7 @@
 
 echo "deb http://ftp.debian.org/debian/ jessie-backports main contrib non-free" > /etc/apt/sources.list.d/backports.list
 apt-get update
-apt-get install -y openjdk-8-jre-headless jq vim-nox curl
+apt-get install -t jessie-backports -y openjdk-8-jre-headless jq vim-nox curl
 
 cat > /etc/systemd/system/demo.service <<EOL
 [Unit]

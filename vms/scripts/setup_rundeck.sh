@@ -6,7 +6,7 @@ apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 379CE192D401AB
 echo "deb http://ftp.debian.org/debian/ jessie-backports main contrib non-free" > /etc/apt/sources.list.d/backports.list
 echo "deb https://dl.bintray.com/rundeck/rundeck-deb /" > /etc/apt/sources.list.d/rundeck.list
 apt-get update
-apt-get install -y openjdk-8-jre-headless rundeck vim-nox
+apt-get install -t jessie-backports -y openjdk-8-jre-headless rundeck vim-nox
 sed -i 's/localhost/192.168.33.50/g' /etc/rundeck/rundeck-config.properties
 sed -i 's=/var/rundeck/projects=/var/lib/rundeck/projects=g' /etc/rundeck/framework.properties
 cat >> /etc/rundeck/framework.properties <<EOF

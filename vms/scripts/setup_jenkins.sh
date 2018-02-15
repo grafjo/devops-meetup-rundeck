@@ -4,7 +4,7 @@ echo "deb http://pkg.jenkins.io/debian-stable binary/" > /etc/apt/sources.list.d
 echo "deb http://ftp.debian.org/debian/ jessie-backports main contrib non-free" > /etc/apt/sources.list.d/backports.list
 apt-get update
 # gsettings solves '(process:6319): GLib-GIO-ERROR **: No GSettings schemas are installed on the system'
-apt-get install -y openjdk-8-jdk-headless openjdk-8-jre-headless jenkins git gsettings-desktop-schemas vim-nox
+apt-get install -t jessie-backports -y openjdk-8-jdk-headless openjdk-8-jre-headless jenkins git gsettings-desktop-schemas vim-nox
 update-ca-certificates -f
 #apt-get purge -y openjdk-7-jre-headless
 #apt-get autoremove -y
