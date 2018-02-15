@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NEXUS_VERSION=2.13.0-01
+NEXUS_VERSION=2.14.7-01
 user="nexus"
 group="nexus"
 
